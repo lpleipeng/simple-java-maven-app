@@ -1,5 +1,8 @@
 pipeline {
     agent any
+    options {
+        skipStagesAfterUnstable()
+    }
     stages {
         stage('Build') {
             steps {
@@ -12,11 +15,16 @@ pipeline {
                 // 同样用绝对路径，和 Build 阶段保持一致
                 sh '/var/lib/jenkins/.sdkman/candidates/maven/current/bin/mvn test'
             }
+           post {
+                always {
+            		junit '**/target/surefire-reports/*.xml'
+       			 }
+    		}'
+	}
+	stage('Deliver') { 
+            steps {
+                sh './jenkins/scripts/deliver.sh' 
+            }
         }
-    }
-    post {
-        always {
-            junit '**/target/surefire-reports/*.xml'
-        }
-    }
+     }
 }

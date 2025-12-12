@@ -1,12 +1,12 @@
 pipeline {
     agent any
     stages {
-        stage('Build') { 
+        stage('Build') {
             steps {
-		sh '/var/lib/jenkins/.sdkman/candidates/maven/current/bin/mvn -B -DskipTests clean package'
+                sh 'mvn -B -DskipTests clean package'
             }
         }
-		stage('Test') { 
+        stage('Test') { 
             steps {
                 sh 'mvn test' 
             }
